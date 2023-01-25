@@ -1,4 +1,4 @@
-# Spotify-Whatever
+# BoomBox
 
 PROJECT NAME: BoomBox
 
