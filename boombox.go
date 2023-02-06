@@ -28,7 +28,8 @@ var users = []User{}
 
 func main() {
 	http.HandleFunc("/signup", SignUpHandler)
-
+	http.HandleFunc("/login", LoginHandler)
+	
 	fmt.Println("Starting server on :8080")
 	err := http.ListenAndServe(":8080", nil)
 	if err != nil {
@@ -73,4 +74,34 @@ func SignUpHandler(w http.ResponseWriter, r *http.Request) {
 
 	users = append(users, user)
 	http.Redirect(w, r, "/", http.StatusSeeOther)
+}
+
+func LoginHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method == "GET" {
+		tmpl, err := template.ParseFiles("login.html")
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		tmpl.Execute(w, nil)
+		return
+	}
+
+	if r.Method != "POST" {
+		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
+		return
+	}
+
+	username := r.FormValue("username")
+	password := r.FormValue("password")
+
+	for _, u := range users {
+		if u.Username == username && u.Password == password {
+			w.Write([]byte("Login successful"))
+			return
+		}
+	}
+
+	http.Redirect(w, r, "/signup", http.StatusSeeOther)
 }
