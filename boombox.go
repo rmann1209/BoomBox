@@ -12,6 +12,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/gorilla/mux"
 	"html/template"
 	"log"
 	"net/http"
@@ -27,9 +28,14 @@ type User struct {
 var users = []User{}
 
 func main() {
-	http.HandleFunc("/signup", SignUpHandler)
-	http.HandleFunc("/login", LoginHandler)
-	
+	r := mux.NewRouter()
+
+	r.HandleFunc("/signup", SignUpHandler)
+	r.HandleFunc("/login", LoginHandler)
+	http.Handle("/", r)
+
+	r.Use(loggingMiddleware)
+
 	fmt.Println("Starting server on :8080")
 	err := http.ListenAndServe(":8080", nil)
 	if err != nil {
@@ -104,4 +110,10 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	http.Redirect(w, r, "/signup", http.StatusSeeOther)
+}
+func loggingMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		log.Println(r.RequestURI)
+		next.ServeHTTP(w, r)
+	})
 }
