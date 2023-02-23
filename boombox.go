@@ -13,12 +13,15 @@ package main
 import (
 	"fmt"
 	"github.com/gorilla/mux"
+	"gorm.io/driver/sqlite"
+	"gorm.io/gorm"
 	"html/template"
 	"log"
 	"net/http"
 )
 
 type User struct {
+	gorm.Model
 	Username  string
 	Password  string
 	FirstName string
@@ -28,16 +31,21 @@ type User struct {
 var users = []User{}
 
 func main() {
+	//db -> database
+	db, err := gorm.Open(sqlite.Open("basedV1.db"), &gorm.Config{})
+	if err != nil {
+		panic("Failed to open database.")
+	}
+	db.AutoMigrate(&User{})
 	r := mux.NewRouter()
-
 	r.HandleFunc("/signup", SignUpHandler)
 	r.HandleFunc("/login", LoginHandler)
 	http.Handle("/", r)
 
-	r.Use(loggingMiddleware)
+	r.Use(logger)
 
 	fmt.Println("Starting server on :8080")
-	err := http.ListenAndServe(":8080", nil)
+	err = http.ListenAndServe(":8080", nil)
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -111,7 +119,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 
 	http.Redirect(w, r, "/signup", http.StatusSeeOther)
 }
-func loggingMiddleware(next http.Handler) http.Handler {
+func logger(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		log.Println(r.RequestURI)
 		next.ServeHTTP(w, r)
