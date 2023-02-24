@@ -108,11 +108,13 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	username := r.FormValue("username")
 	password := r.FormValue("password")
 
-	for _, u := range users {
-		if u.Username == username && u.Password == password {
-			w.Write([]byte("Login successful"))
-			return
-		}
+	user := User{}
+
+	result := db.Where("username = ? AND password = ?", username, password).First(&user)
+	if result.Error != nil {
+		//print("fucklogin")
+		http.Error(w, "Username or password is incorrect", http.StatusBadRequest)
+		return
 	}
 
 	http.Redirect(w, r, "/signup", http.StatusSeeOther)
