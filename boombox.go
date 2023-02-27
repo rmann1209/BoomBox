@@ -18,8 +18,6 @@ type User struct {
 	LastName  string
 }
 
-var users = []User{}
-
 var db *gorm.DB
 
 func main() {
@@ -36,6 +34,7 @@ func main() {
 	}
 
 	r := mux.NewRouter()
+	r.HandleFunc("/home", HomeHandler)
 	r.HandleFunc("/signup", SignUpHandler)
 	r.HandleFunc("/login", LoginHandler)
 	http.Handle("/", r)
@@ -85,7 +84,7 @@ func SignUpHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Username already exists", http.StatusBadRequest)
 		return
 	}
-	http.Redirect(w, r, "/", http.StatusSeeOther)
+	http.Redirect(w, r, "/home", http.StatusSeeOther)
 }
 
 func LoginHandler(w http.ResponseWriter, r *http.Request) {
@@ -112,12 +111,38 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 
 	result := db.Where("username = ? AND password = ?", username, password).First(&user)
 	if result.Error != nil {
-		//print("fucklogin")
 		http.Error(w, "Username or password is incorrect", http.StatusBadRequest)
 		return
 	}
+	http.Redirect(w, r, "/home", http.StatusSeeOther)
+}
+func HomeHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method == "GET" {
+		tmpl, err := template.ParseFiles("homemock.html") //direct to the file
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
 
-	http.Redirect(w, r, "/signup", http.StatusSeeOther)
+		tmpl.Execute(w, nil)
+		return
+	}
+
+	if r.Method != "POST" {
+		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
+		return
+	}
+	result := r.FormValue("action")
+	if result == "Sign up" {
+		http.Redirect(w, r, "/signup", http.StatusSeeOther)
+	} else if result == "Login" {
+		http.Redirect(w, r, "/login", http.StatusSeeOther)
+
+	} else {
+		http.Redirect(w, r, "/home", http.StatusSeeOther)
+
+	}
+
 }
 
 // begin logger - DND
