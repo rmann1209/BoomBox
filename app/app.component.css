@@ -1,3 +1,77 @@
+button {
+  background-color: rgb(20, 215, 143);
+  color: white;
+
+  padding: 14px 20px;
+
+  border: none;
+  border-radius: 2px;
+
+  cursor: pointer;
+
+  width: 100%;
+
+  font-size: medium; 
+
+  display:inline-block; /* Display buttons side by side */
+  margin-top: 10px;
+
+  /* IF USING TWO BUTTONS SIDE BY SIDE, DIVIDE SCREEN BY REMAINING PERCENT
+  margin-right: 25%;
+  margin-left: 25%;
+  */
+}
+
+button:hover {
+  background-color:rgb(20, 235, 163);
+  transition: 0.5s;
+}
+
+button:disabled {
+  background-color: #eee;
+  color: #aaa;
+  cursor: auto;
+}
+
+/* Full-width inputs */
+input[type=text], input[type=password] {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
+/* Center the avatar image inside this container */
+.imgcontainer {
+  text-align: center;
+  margin: 24px 0 12px 0;
+}
+
+/* Avatar image */
+img.avatar {
+  width: 40%;
+  border-radius: 50%;
+}
+
+/* Add padding to containers */
+.container {
+  padding: 16px;
+}
+
+/* Change styles for span and cancel button on extra small screens */
+@media screen and (max-width: 300px) {
+  span.psw {
+    display: block;
+    float: none;
+  }
+  .cancelbtn {
+    width: 100%;
+  }
+}
+
+
 h1 {
     color: #369;
     font-family: Arial, Helvetica, sans-serif;
@@ -19,35 +93,46 @@ body, input[type="text"], button {
     font-family: Cambria, Georgia, serif;
 }
 
+/* CAN BE USED TO CHANGE BODY OF THE WE PAGE */
 body {
     /*background-color: rgb(0, 215, 143); */
 }
 
 .navbar{
     background-color:rgb(0, 215, 143);
+    position: relative; /* Maybe allows navbar to shrink if page size shrinks ???? */
 }
 
-button {
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    color: black;
-    font-size: 1.2rem;
-    padding: 1rem;
-    margin-right: 1rem;
-    margin-bottom: 1rem;
-    margin-top: 1rem;
+.navButton { /* THIS IS THE CLASS FOR BUTTONS IN THE NAVBAR */
+    background-color:rgb(20, 215, 143);
+
+    border:#000; /* REMOVES BORDER (WITHOUT THIS LINE, BORDER IS SOLID BLACK) */
+
+    border-radius: 5px; /* DETERMINES HOW ROUNDED THE BUTTON EDGE IS */
+
+    cursor: pointer; /* CHANGES HOW THE CURSOR LOOKS WHEN HOVERING OVER BUTTON*/
+
+    color: rgb(0, 0, 0); /* CHANGES THE FONT COLOR OF BUTTON TEXT */
+
+    font-size: 1rem; /* CHANGES FONT SIZE */
+
+    padding-inline: .5rem;
+
+    /* DETERMINES HEIGHT AND WIDTH OF BUTTON */
+    height: 50px;
+    width: 100px;
+
+    /* USE MARGIN TO SPECIFY HOW MUCH EMPTY SPACE IN ANY GIVEN DIRECTION */
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-top: -20px;
+
 }
 
-button:hover {
-    background-color: black;
-    color: white;
-}
-
-button:disabled {
-    background-color: #eee;
-    color: #aaa;
-    cursor: auto;
+/* DETERMINES HOW THE BUTTON REACTS WHEN CURSOR HOVERS OVER IT */
+.navButton:hover {
+  background-color:rgb(20, 235, 163);
+  transition: 0.5s;
 }
 
 * {
@@ -58,6 +143,8 @@ button:disabled {
   font-size: xx-large;
   display: flex;
   justify-content: center;
+
+  margin-right: 600px;
 }
 
 .header{
@@ -86,18 +173,35 @@ form{
   font-size:14pt;
 }
 
-.login-button{
-  font-size: large;
-  text-align: center;
+.loginButton{
+  background-color:#f0f0f0; /* SETS BACKGROUND COLOR OF BUTTON */
 
-  display: block;
-  width: 70px;
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
 
-  margin: auto;
+  border:#000; /* REMOVES BORDER (WITHOUT THIS LINE, BORDER IS SOLID BLACK) */
 
-  display: flex;
-  justify-content: center;
-  margin-top: 1.5rem;
+  border-radius: 5px; /* DETERMINES HOW ROUNDED THE BUTTON EDGE IS */
+
+  cursor: pointer; /* CHANGES HOW THE CURSOR LOOKS WHEN HOVERING OVER BUTTON*/
+
+  color: rgb(0, 0, 0); /* CHANGES THE FONT COLOR OF BUTTON TEXT */
+
+  font-size: 1rem; /* CHANGES FONT SIZE */
+
+  padding-inline: .5rem;
+
+  /* DETERMINES HEIGHT AND WIDTH OF BUTTON */
+  height: 35px;
+  width: 60px;
+
+  /* USE MARGIN TO SPECIFY HOW MUCH EMPTY SPACE IN ANY GIVEN DIRECTION */
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+.loginButton:hover {
+  background-color:rgb(216, 216, 216);
+  transition: 0.5s;
 }
 
 .flex-parent {

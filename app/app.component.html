@@ -1,77 +1,73 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <!--CSS Styles -->
-    <link rel="stylesheet" href="app.component.css" />
+    <link rel="stylesheet" href="./app.component.css" />
 
 
     <title>BoomBox</title>
-</head>
+  </head>
 
-<body>
-<!-- Navbar -->
-<nav class="navbar navbar-expand-sm bg-info navbar-dark">
-    <header class ="TITLE">BoomBox</header>
-<!--
-    <button class="button">SIGN UP</button>
-    <button class="button">LOGIN</button>
-    <button class="button">MORE INFO</button>-->
-  <form action="/login" method="post">
-  <input type="submit" name="action" value="SIGN UP">
-  <input type="submit" name="action" value="LOGIN">
-  <input type="submit" name="action" value="MORE INFO">
-  </form>
-    <!--<button class="button">FEET PICS</button>-->
-</nav>
+  <body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-sm bg-info navbar-dark">
+      <header class ="TITLE">BoomBox</header>
 
-<label class="header"></label>
+      <form action="/login" method="post">
+        <input type="submit" class="navButton" name="action" value="Home">
+        <input type="submit" class="navButton" name="action" value="Sign up">
+        <input type="submit" class="navButton" name="action" value="Login">
+      </form>
+      <!--<button class="button">FEET PICS</button>-->
+    </nav>
 
-<div id="form">
+    <label class="header"></label>
 
-    <form action="" method="post" name="registration" class="register">
-
-        <label for="Username"> Username: </label>
-        <input name="Username" />
-
-
-</div>
-
-        <label for="Password"> Password: </label>
-        <input name="Password" type="password" />
-      <button mat-raised-button type = "submit" class="login-button">Login</button>
+    
+    <!-- Login Section -->
+    <form action="action_page.php" method="post">
+    
+      <div class="container">
+        <label for="uname"><b>Username</b></label>
+        <input type="text" placeholder="Enter Username" name="uname" required>
+    
+        <label for="psw"><b>Password</b></label>
+        <input type="password" placeholder="Enter Password" name="psw" required>
+    
+        <button type="submit">Login</button> 
+      </div>
+    
     </form>
-</div>
+    <!-- Skills section -->
 
-<!--<input type="submit" value="Login"> -->
+    <!-- Projects section -->
 
+    <!-- Contact section -->
 
-<!-- More about -->
+    <!-- Social accounts - Fixed to the right -->
 
-<!-- Skills section -->
+    <!-- Scroll to top -->
 
-<!-- Projects section -->
+    <!-- Footer section -->
 
-<!-- Contact section -->
+    <!-- Website scripts -->
+    
+    <!--
+    <script src="assets/js/app.js"></script>
 
-<!-- Social accounts - Fixed to the right -->
+    //Ion icons scripts
+    <script
+      type="module"
+      src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"
+    ></script>
+    <script
+      nomodule
+      src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"
+    ></script>
+    -->
 
-<!-- Scroll to top -->
+  </body>
 
-<!-- Footer section -->
-
-<!-- Website scripts -->
-<script src="assets/js/app.js"></script>
-
-<!-- Ion icons scripts -->
-<script
-        type="module"
-        src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"
-></script>
-<script
-        nomodule
-        src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"
-></script>
-</body>
 </html>
