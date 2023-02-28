@@ -71,8 +71,6 @@ func SignUpHandler(w http.ResponseWriter, r *http.Request) {
 	firstName := r.FormValue("first_name")
 	lastName := r.FormValue("last_name")
 
-	//print("fuck")
-
 	result := db.Create(&User{
 		Username:  username,
 		Password:  password,
@@ -89,7 +87,9 @@ func SignUpHandler(w http.ResponseWriter, r *http.Request) {
 
 func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "GET" {
-		tmpl, err := template.ParseFiles("login.html")
+		//tmpl, err := template.ParseFiles("login.html")//
+		tmpl, err := template.ParseFiles("angularstuff/your-awesome-project/src/app/app.component.html")
+		//tmpl, err := template.ParseFiles("angularstuff/your-awesome-project/src/index.html") //
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -103,9 +103,16 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
 		return
 	}
-
-	username := r.FormValue("username")
-	password := r.FormValue("password")
+	result1 := r.FormValue("action")
+	if result1 == "SIGN UP" {
+		http.Redirect(w, r, "/signup", http.StatusSeeOther)
+	} else if result1 == "MORE INFO" {
+		http.Redirect(w, r, "/home", http.StatusSeeOther)
+	} else if result1 == "LOGIN" {
+		http.Redirect(w, r, "/login", http.StatusSeeOther)
+	}
+	username := r.FormValue("Username")
+	password := r.FormValue("Password")
 
 	user := User{}
 
