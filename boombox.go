@@ -1,11 +1,13 @@
 package main
 
 import (
+	"embed"
 	"fmt"
 	"github.com/gorilla/mux"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 	"html/template"
+	"io/fs"
 	"log"
 	"net/http"
 )
@@ -19,6 +21,7 @@ type User struct {
 }
 
 var db *gorm.DB
+var static embed.FS
 
 func main() {
 	//db -> database
@@ -38,6 +41,11 @@ func main() {
 	r.HandleFunc("/signup", SignUpHandler)
 	r.HandleFunc("/login", LoginHandler)
 	http.Handle("/", r)
+	webapp, err := fs.Sub(static, "static")
+	if err != nil {
+		fmt.Println(err)
+	}
+	r.PathPrefix("/").Handler(http.FileServer(http.FS(webapp)))
 	//starts logger
 	r.Use(logger)
 
