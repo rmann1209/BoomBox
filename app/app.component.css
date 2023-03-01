@@ -11,7 +11,7 @@ button {
 
   width: 100%;
 
-  font-size: medium; 
+  font-size: 1.2rem; 
 
   display:inline-block; /* Display buttons side by side */
   margin-top: 10px;
@@ -114,19 +114,18 @@ body {
 
     color: rgb(0, 0, 0); /* CHANGES THE FONT COLOR OF BUTTON TEXT */
 
-    font-size: 1rem; /* CHANGES FONT SIZE */
+    font-size: 1.2rem; /* CHANGES FONT SIZE */
 
-    padding-inline: .5rem;
+    /*padding-inline: .5rem; */
 
     /* DETERMINES HEIGHT AND WIDTH OF BUTTON */
     height: 50px;
-    width: 100px;
+    width: 130px;
 
     /* USE MARGIN TO SPECIFY HOW MUCH EMPTY SPACE IN ANY GIVEN DIRECTION */
-    margin-left: 20px;
-    margin-right: 20px;
-    margin-top: -20px;
-
+    margin-left: 2%;
+    margin-right: 2%;
+    margin-top: -5.5%;
 }
 
 /* DETERMINES HOW THE BUTTON REACTS WHEN CURSOR HOVERS OVER IT */
@@ -144,7 +143,7 @@ body {
   display: flex;
   justify-content: center;
 
-  margin-right: 600px;
+  margin-right: 55%;
 }
 
 .header{
