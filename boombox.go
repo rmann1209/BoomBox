@@ -20,6 +20,22 @@ type User struct {
 	LastName  string
 }
 
+type SongReview struct {
+	gorm.Model
+	SongTitle string // song Title for song Review
+	Rating    int    // Rating out of 5
+	Comment   string // User comment on song
+	Username  string // for the user
+}
+
+type AlbumReview struct {
+	gorm.Model
+	AlbumTitle string // album Title for song Review
+	Rating     int    // Rating out of 5
+	Comment    string // User comment on song
+	Username   string // for the user
+}
+
 var db *gorm.DB
 var static embed.FS
 
@@ -131,7 +147,6 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-
 		tmpl.Execute(w, nil)
 		return
 	}
