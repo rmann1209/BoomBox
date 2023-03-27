@@ -23,9 +23,10 @@ type User struct {
 var db *gorm.DB
 var static embed.FS
 
+var activeUsername string = ""
+
 func main() {
 	//db -> database
-	var activeUsername string = ""
 	var err error
 	db, err = gorm.Open(sqlite.Open("usersbase.db"), &gorm.Config{})
 	if err != nil {
@@ -97,7 +98,7 @@ func SignUpHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func LoginHandler(w http.ResponseWriter, r *http.Request, activeUsername *string) {
+func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "POST" {
 		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
 		return
@@ -119,15 +120,10 @@ func LoginHandler(w http.ResponseWriter, r *http.Request, activeUsername *string
 		return
 	} else {
 		//make logged in user the activeUser
-		makeActive(activeUsername, loginUser.Username)
+		activeUsername = loginUser.Username
 	}
 }
-func makeActive(activeUsername *string, newActiveUsername string)
-{
-	&activeUsername = newActiveUsername
-	fmt.printf("%s is the new active user", &activeUsername)
 
-}
 func HomeHandler(w http.ResponseWriter, r *http.Request) {
 	/* if r.Method == "GET" {
 		tmpl, err := template.ParseFiles("homemock.html") //direct to the file
