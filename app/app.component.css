@@ -101,6 +101,7 @@ body {
 .navbar{
     background-color:rgb(0, 215, 143);
     position: relative; /* Maybe allows navbar to shrink if page size shrinks ???? */
+    overflow: auto;
 }
 
 .navButton { /* THIS IS THE CLASS FOR BUTTONS IN THE NAVBAR */
@@ -119,13 +120,10 @@ body {
     /*padding-inline: .5rem; */
 
     /* DETERMINES HEIGHT AND WIDTH OF BUTTON */
-    height: 50px;
-    width: 130px;
-
-    /* USE MARGIN TO SPECIFY HOW MUCH EMPTY SPACE IN ANY GIVEN DIRECTION */
-    margin-left: 2%;
-    margin-right: 2%;
-    margin-top: -5.5%;
+    padding-top: 1%;
+    padding-bottom: 1%;
+    padding-left: 2%;
+    padding-right: 2%;
 }
 
 /* DETERMINES HOW THE BUTTON REACTS WHEN CURSOR HOVERS OVER IT */

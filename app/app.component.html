@@ -1,3 +1,4 @@
+<router-outlet>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -16,11 +17,9 @@
     <nav class="navbar navbar-expand-sm bg-info navbar-dark">
       <header class ="TITLE">BoomBox</header>
 
-      <form action="/login" method="post">
-        <input type="submit" class="navButton" name="action" value="Home">
-        <input type="submit" class="navButton" name="action" value="Sign up">
-        <input type="submit" class="navButton" name="action" value="Login">
-      </form>
+      <input type="submit" (click)="goToPage('home')" class="navButton" name="action" value="Home">
+      <input type="submit" class="navButton" name="action" value="Sign up">
+      <input type="submit" class="navButton" name="action" value="Login">
       <!--<button class="button">FEET PICS</button>-->
     </nav>
 
@@ -29,19 +28,20 @@
 
     
     <!-- Login Section -->
-    <form action="action_page.php" method="post">
+    <form action="https://www.w3schools.com/howto/howto_css_login_form.asp" method="post">
     
       <div class="container">
         <label for="uname"><b>Username</b></label>
-        <input type="text" placeholder="Enter Username" name="uname" required>
+        <input id="Username" type="text" placeholder="Enter Username" name="uname" required>
     
         <label for="psw"><b>Password</b></label>
-        <input type="password" placeholder="Enter Password" name="psw" required>
+        <input id="Password" type="password" placeholder="Enter Password" name="psw" required>
     
-        <button type="submit">Login</button> 
+        <button id="submit" type="submit">Login</button> 
       </div>
     
     </form>
+
     <!-- Skills section -->
 
     <!-- Projects section -->
@@ -73,3 +73,5 @@
   </body>
 
 </html>
+
+</router-outlet>
