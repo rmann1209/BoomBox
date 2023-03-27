@@ -1,38 +1,38 @@
 button {
     background-color: rgb(20, 215, 143);
     color: white;
-  
+
     padding: 14px 20px;
-  
+
     border: none;
     border-radius: 2px;
-  
+
     cursor: pointer;
-  
+
     width: 100%;
-  
-    font-size: 1.2rem; 
-  
+
+    font-size: 1.2rem;
+
     display:inline-block; /* Display buttons side by side */
     margin-top: 10px;
-  
+
     /* IF USING TWO BUTTONS SIDE BY SIDE, DIVIDE SCREEN BY REMAINING PERCENT
     margin-right: 25%;
     margin-left: 25%;
     */
   }
-  
+
   button:hover {
     background-color:rgb(20, 235, 163);
     transition: 0.5s;
   }
-  
+
   button:disabled {
     background-color: #eee;
     color: #aaa;
     cursor: auto;
   }
-  
+
   /* Full-width inputs */
   input[type=text], input[type=password] {
     width: 100%;
@@ -42,24 +42,24 @@ button {
     border: 1px solid #ccc;
     box-sizing: border-box;
   }
-  
+
   /* Center the avatar image inside this container */
   .imgcontainer {
     text-align: center;
     margin: 24px 0 12px 0;
   }
-  
+
   /* Avatar image */
   img.avatar {
     width: 40%;
     border-radius: 50%;
   }
-  
+
   /* Add padding to containers */
   .container {
-    padding: 0px;
+    margin-top: -33%;
   }
-  
+
   /* Change styles for span and cancel button on extra small screens */
   @media screen and (max-width: 300px) {
     span.psw {
@@ -70,80 +70,75 @@ button {
       width: 100%;
     }
   }
-  
-  
+
+
   h1 {
       color: #369;
       font-family: Arial, Helvetica, sans-serif;
       font-size: 250%;
   }
-  
+
   h2, h3 {
       color: #444;
       font-family: Arial, Helvetica, sans-serif;
       font-weight: lighter;
   }
-  
+
   body{
       margin: 2em;
   }
-  
+
   body, input[type="text"], button {
       color: #333;
       font-family: Cambria, Georgia, serif;
   }
-  
-  /* CAN BE USED TO CHANGE BODY OF THE WE PAGE */
-  body {
-      /*background-color: rgb(0, 215, 143); */
-  }
-  
+
   .navbar{
       background-color:rgb(0, 215, 143);
       position: relative; /* Maybe allows navbar to shrink if page size shrinks ???? */
       overflow: auto;
   }
-  
+
   .navButton { /* THIS IS THE CLASS FOR BUTTONS IN THE NAVBAR */
       background-color:rgb(20, 215, 143);
-  
+
       border:#000; /* REMOVES BORDER (WITHOUT THIS LINE, BORDER IS SOLID BLACK) */
-  
+
       border-radius: 5px; /* DETERMINES HOW ROUNDED THE BUTTON EDGE IS */
-  
+
       cursor: pointer; /* CHANGES HOW THE CURSOR LOOKS WHEN HOVERING OVER BUTTON*/
-  
+
       color: rgb(0, 0, 0); /* CHANGES THE FONT COLOR OF BUTTON TEXT */
-  
+
       font-size: 1.2rem; /* CHANGES FONT SIZE */
-  
+
       /*padding-inline: .5rem; */
-  
+
       /* DETERMINES HEIGHT AND WIDTH OF BUTTON */
       padding-top: 1%;
       padding-bottom: 1%;
       padding-left: 2%;
       padding-right: 2%;
   }
-  
+
   /* DETERMINES HOW THE BUTTON REACTS WHEN CURSOR HOVERS OVER IT */
   .navButton:hover {
     background-color:rgb(20, 235, 163);
     transition: 0.5s;
   }
-  
+
   * {
       font-family: Arial, Helvetica, sans-serif;
   }
-  
+
   .TITLE{
     font-size: xx-large;
     display: flex;
     justify-content: center;
-  
+
     margin-right: 55%;
   }
-  
+
   .header{
     font-size: Larger;
     margin: 0 auto;
@@ -151,64 +146,64 @@ button {
     text-align: center;
     margin-top: 4rem;
   }
-  
+
   .username{
     margin: 0 auto;
     display: inline-block;
     text-align: center;
   }
-  
+
   form{
     vertical-align: middle;
     margin: auto;
-  
+
     display: flex;
     justify-content: center;
     margin-top: 1.0rem;
-  
+
     height:23px;
     font-size:14pt;
   }
-  
+
   .loginButton{
     background-color:#f0f0f0; /* SETS BACKGROUND COLOR OF BUTTON */
-  
+
     box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
-  
+
     border:#000; /* REMOVES BORDER (WITHOUT THIS LINE, BORDER IS SOLID BLACK) */
-  
+
     border-radius: 5px; /* DETERMINES HOW ROUNDED THE BUTTON EDGE IS */
-  
+
     cursor: pointer; /* CHANGES HOW THE CURSOR LOOKS WHEN HOVERING OVER BUTTON*/
-  
+
     color: rgb(0, 0, 0); /* CHANGES THE FONT COLOR OF BUTTON TEXT */
-  
+
     font-size: 1rem; /* CHANGES FONT SIZE */
-  
+
     padding-inline: .5rem;
-  
+
     /* DETERMINES HEIGHT AND WIDTH OF BUTTON */
     height: 35px;
     width: 60px;
-  
+
     /* USE MARGIN TO SPECIFY HOW MUCH EMPTY SPACE IN ANY GIVEN DIRECTION */
     margin-left: 20px;
     margin-right: 20px;
   }
-  
+
   .loginButton:hover {
     background-color:rgb(216, 216, 216);
     transition: 0.5s;
   }
-  
+
   .flex-parent {
     display: flex;
   }
-  
+
   .jc-center {
     justify-content: center;
   }
-  
+
   .label {
     font-family: Georgia, "Times New Roman", Times, serif;
     font-size: 18px;
@@ -223,7 +218,7 @@ button {
     justify-content: center;
     clear: both;
    }
-  
+
    .input {
     height: 20px;
     width: 300px;
@@ -233,7 +228,7 @@ button {
     display: flex;
     justify-content: center;
    }
-  
+
    /* Variables */
   :root {
     --font-family: "Roboto", sans-serf;
@@ -251,35 +246,35 @@ button {
     --transition: 0.3s;
   }
   /* Variables end */
-  
+
   html {
     scroll-behavior: smooth;
   }
-  
+
   /* CSS Resets */
   * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
   }
-  
+
   ul {
     list-style-type: none;
   }
-  
+
   a {
     text-decoration: none;
     color: var(--primary-color);
   }
-  
+
   a:hover {
     color: var(--secondary-color);
   }
-  
+
   body {
     font-family: var(--font-family);
   }
-  
+
   nav {
       position: sticky;
       top: 0;
