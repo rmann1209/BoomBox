@@ -2,11 +2,11 @@ package main
 
 import (
 	"embed"
+	"encoding/json"
 	"fmt"
 	"github.com/gorilla/mux"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
-	"html/template"
 	"io/fs"
 	"log"
 	"net/http"
@@ -25,6 +25,7 @@ var static embed.FS
 
 func main() {
 	//db -> database
+	var activeUsername string = ""
 	var err error
 	db, err = gorm.Open(sqlite.Open("usersbase.db"), &gorm.Config{})
 	if err != nil {
@@ -50,34 +51,35 @@ func main() {
 	r.Use(logger)
 
 	fmt.Println("Starting server on :8080")
-	err = http.ListenAndServe(":8080", nil)
+	err = http.ListenAndServe(":8080", nil) //DO NOT CHANGE THIS
 	if err != nil {
 		log.Fatalln(err)
 	}
 }
 func SignUpHandler(w http.ResponseWriter, r *http.Request) {
+	log.Println(*r)
 	if r.Method == "GET" {
-		tmpl, err := template.ParseFiles("signup.html")
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-
-		tmpl.Execute(w, nil)
-		return
-	}
-
-	if r.Method != "POST" {
+		fmt.Println("GET REQUEST RECEIVED ON SIGNUP")
 		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
 		return
 	}
 
-	print(r)
+	if r.Method != "POST" {
+		fmt.Printf("POST REQUEST NOT RECEIVED ON SIGNUP %s received instead", r.Method)
+		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
+		return
+	}
 
-	username := r.FormValue("username")
-	password := r.FormValue("password")
-	firstName := r.FormValue("first_name")
-	lastName := r.FormValue("last_name")
+	enableCors(&w) //so that the FE can access
+	var signupUser User
+	length := r.ContentLength
+	if length > 0 {
+		json.NewDecoder(r.Body).Decode(&signupUser)
+	}
+	username := signupUser.Username
+	password := signupUser.Password
+	firstName := signupUser.FirstName
+	lastName := signupUser.LastName
 
 	result := db.Create(&User{
 		Username:  username,
@@ -89,38 +91,25 @@ func SignUpHandler(w http.ResponseWriter, r *http.Request) {
 	if result.Error != nil {
 		http.Error(w, "Username already exists", http.StatusBadRequest)
 		return
+	} else {
+
+		fmt.Printf("New username: %s  and password %s", username, password)
 	}
-	http.Redirect(w, r, "/home", http.StatusSeeOther)
 }
 
-func LoginHandler(w http.ResponseWriter, r *http.Request) {
-	if r.Method == "GET" {
-		//tmpl, err := template.ParseFiles("login.html")//
-		tmpl, err := template.ParseFiles("angularstuff/your-awesome-project/src/app/app.component.html")
-		//tmpl, err := template.ParseFiles("angularstuff/your-awesome-project/src/index.html") //
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-
-		tmpl.Execute(w, nil)
-		return
-	}
-
+func LoginHandler(w http.ResponseWriter, r *http.Request, activeUsername *string) {
 	if r.Method != "POST" {
 		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
 		return
 	}
-	result1 := r.FormValue("action")
-	if result1 == "SIGN UP" {
-		http.Redirect(w, r, "/signup", http.StatusSeeOther)
-	} else if result1 == "MORE INFO" {
-		http.Redirect(w, r, "/home", http.StatusSeeOther)
-	} else if result1 == "LOGIN" {
-		http.Redirect(w, r, "/login", http.StatusSeeOther)
+	enableCors(&w) //so that the FE can access
+	var loginUser User
+	length := r.ContentLength
+	if length > 0 {
+		json.NewDecoder(r.Body).Decode(&loginUser)
 	}
-	username := r.FormValue("Username")
-	password := r.FormValue("Password")
+	username := loginUser.Username
+	password := loginUser.Password
 
 	user := User{}
 
@@ -128,11 +117,19 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	if result.Error != nil {
 		http.Error(w, "Username or password is incorrect", http.StatusBadRequest)
 		return
+	} else {
+		//make logged in user the activeUser
+		makeActive(activeUsername, loginUser.Username)
 	}
-	http.Redirect(w, r, "/home", http.StatusSeeOther)
+}
+func makeActive(activeUsername *string, newActiveUsername string)
+{
+	&activeUsername = newActiveUsername
+	fmt.printf("%s is the new active user", &activeUsername)
+
 }
 func HomeHandler(w http.ResponseWriter, r *http.Request) {
-	if r.Method == "GET" {
+	/* if r.Method == "GET" {
 		tmpl, err := template.ParseFiles("homemock.html") //direct to the file
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -142,7 +139,7 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 		tmpl.Execute(w, nil)
 		return
 	}
-
+	*/
 	if r.Method != "POST" {
 		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
 		return
@@ -166,4 +163,9 @@ func logger(next http.Handler) http.Handler {
 		log.Println(r.RequestURI)
 		next.ServeHTTP(w, r)
 	})
+}
+
+func enableCors(w *http.ResponseWriter) { //this function enables Cors which may be used to link FE and BE
+	(*w).Header().Set("Access-Control-Allow-Origin", "*")
+	(*w).Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
 }
