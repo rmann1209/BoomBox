@@ -23,20 +23,14 @@ type User struct {
 type SongReview struct {
 	gorm.Model
 	SongTitle string // song Title for song Review
+	Artist    string
 	Rating    int    // Rating out of 5
 	Comment   string // User comment on song
-	Username  string // for the user
-}
-
-type AlbumReview struct {
-	gorm.Model
-	AlbumTitle string // album Title for song Review
-	Rating     int    // Rating out of 5
-	Comment    string // User comment on song
-	Username   string // for the user
+	Author    string
 }
 
 var db *gorm.DB
+var db2 *gorm.DB
 var static embed.FS
 
 var activeUsername string = ""
@@ -50,6 +44,17 @@ func main() {
 	}
 	err = db.AutoMigrate(&User{})
 	if err != nil {
+		panic("failed to automigrate")
+		return
+	}
+
+	var err2 error
+	db2, err2 = gorm.Open(sqlite.Open("reviews.db"), &gorm.Config{})
+	if err2 != nil {
+		panic("Failed to open database.")
+	}
+	err2 = db2.AutoMigrate(&SongReview{})
+	if err2 != nil {
 		panic("failed to automigrate")
 		return
 	}
@@ -141,16 +146,6 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func HomeHandler(w http.ResponseWriter, r *http.Request) {
-	/* if r.Method == "GET" {
-		tmpl, err := template.ParseFiles("homemock.html") //direct to the file
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-		tmpl.Execute(w, nil)
-		return
-	}
-	*/
 	if r.Method != "POST" {
 		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
 		return
