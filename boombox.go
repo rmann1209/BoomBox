@@ -63,6 +63,7 @@ func main() {
 	r.HandleFunc("/home", HomeHandler)
 	r.HandleFunc("/signup", SignUpHandler)
 	r.HandleFunc("/login", LoginHandler)
+	r.HandleFunc("/review", ReviewHandler)
 	http.Handle("/", r)
 	webapp, err := fs.Sub(static, "static")
 	if err != nil {
@@ -161,6 +162,34 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 
 	}
 
+}
+func ReviewHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != "POST" {
+		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
+		return
+	}
+	enableCors(&w)
+	var newReview SongReview
+	length := r.ContentLength
+	if length > 0 {
+		json.NewDecoder(r.Body).Decode(&newReview)
+	} else {
+		newReview.SongTitle = "Sky"
+		newReview.Artist = "Playboi Carti"
+		newReview.Rating = 5
+		newReview.Comment = "Fire"
+		newReview.Author = "evan"
+	}
+
+	db2.Create(&SongReview{
+		SongTitle: newReview.SongTitle,
+		Artist:    newReview.Artist,
+		Rating:    newReview.Rating,
+		Comment:   newReview.Comment,
+		Author:    activeUsername,
+	})
+	w.WriteHeader(http.StatusCreated)
+	return
 }
 
 // begin logger - DND
