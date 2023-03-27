@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!--CSS Styles -->
+    <link rel="stylesheet" href="./home.component.css" />
+
+
+    <title>BoomBox</title>
+  </head>
+
+  <body>
+    <!-- Navbar -->
+
+    <nav class="navbar navbar-expand-sm bg-info navbar-dark">
+      <header class ="TITLE">BoomBox</header>
+
+      <router-outlet>
+        <li>
+          <a class="navButton" [routerLink]="'/home'">Home</a>
+          <a class="navButton" [routerLink]="'/login'">Login</a>
+          <a class="navButton" [routerLink]="'/signup'">Signup</a>
+        </li>
+      </router-outlet>
+    </nav>
+
+
+    <textarea> Welcome to BoomBox!</textarea>
+
+  </body>
+
+</html>
