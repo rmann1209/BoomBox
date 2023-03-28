@@ -76,20 +76,22 @@ func main() {
 	}
 }
 func SignUpHandler(w http.ResponseWriter, r *http.Request) {
-	log.Println(*r)
-	if r.Method == "GET" {
+	log.Println(r)
+	if r.Method == "OPTIONS" {
+		enableCors(&w)
+		//w.WriteHeader(http.StatusOK)
+		return
+	} else if r.Method == "GET" {
 		fmt.Println("GET REQUEST RECEIVED ON SIGNUP")
 		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
 		return
-	}
-
-	if r.Method != "POST" {
+	} else if r.Method != "POST" {
 		fmt.Printf("POST REQUEST NOT RECEIVED ON SIGNUP %s received instead", r.Method)
 		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
 		return
 	}
-
-	enableCors(&w) //so that the FE can access
+	enableCors(&w)
+	//enableCors(&w) //so that the FE can access
 	var signupUser User
 	length := r.ContentLength
 	if length > 0 {
@@ -100,7 +102,7 @@ func SignUpHandler(w http.ResponseWriter, r *http.Request) {
 	password := signupUser.Password
 	//firstName := signupUser.FirstName
 	//lastName := signupUser.LastName
-
+	//fmt.Printf("Name: %s Password: %s", username, password)
 	result := db.Create(&User{
 		Username: username,
 		Password: password,
@@ -161,7 +163,7 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 
 }
 
-//needs to get reviews - functionality tbd with FE
+// needs to get reviews - functionality tbd with FE
 func viewReviewHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
 
@@ -208,4 +210,6 @@ func logger(next http.Handler) http.Handler {
 func enableCors(w *http.ResponseWriter) { //this function enables Cors which may be used to link FE and BE
 	(*w).Header().Set("Access-Control-Allow-Origin", "*")
 	(*w).Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
+	(*w).Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, X-Requested-With")
+
 }
