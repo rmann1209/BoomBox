@@ -7,17 +7,17 @@ import (
 	"github.com/gorilla/mux"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
-	"io/fs"
 	"log"
 	"net/http"
 )
 
 type User struct {
 	gorm.Model
-	Username  string `gorm:"unique"` //specifies as unique, blocks repeats
-	Password  string
-	FirstName string
-	LastName  string
+	Username string `gorm:"unique"` //specifies as unique, blocks repeats
+	Password string
+	//temp removed firstname and lastname
+	//FirstName string
+	//LastName  string
 }
 
 type SongReview struct {
@@ -29,14 +29,14 @@ type SongReview struct {
 	Author    string
 }
 
-var db *gorm.DB
-var db2 *gorm.DB
+var db *gorm.DB  //db for users
+var db2 *gorm.DB //db for reviews
 var static embed.FS
 
 var activeUsername string = ""
 
 func main() {
-	//db -> database
+	//db -> database for users
 	var err error
 	db, err = gorm.Open(sqlite.Open("usersbase.db"), &gorm.Config{})
 	if err != nil {
@@ -47,7 +47,7 @@ func main() {
 		panic("failed to automigrate")
 		return
 	}
-
+	//opens the review db
 	var err2 error
 	db2, err2 = gorm.Open(sqlite.Open("reviews.db"), &gorm.Config{})
 	if err2 != nil {
@@ -65,16 +65,12 @@ func main() {
 	r.HandleFunc("/login", LoginHandler)
 	r.HandleFunc("/review", ReviewHandler)
 	http.Handle("/", r)
-	webapp, err := fs.Sub(static, "static")
-	if err != nil {
-		fmt.Println(err)
-	}
-	r.PathPrefix("/").Handler(http.FileServer(http.FS(webapp)))
+
 	//starts logger
 	r.Use(logger)
 
 	fmt.Println("Starting server on :8080")
-	err = http.ListenAndServe(":8080", nil) //DO NOT CHANGE THIS
+	err = http.ListenAndServe(":8080", r) //DO NOT CHANGE THIS - second arg may need tot be nil
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -99,16 +95,17 @@ func SignUpHandler(w http.ResponseWriter, r *http.Request) {
 	if length > 0 {
 		json.NewDecoder(r.Body).Decode(&signupUser)
 	}
+	//temp removed firstname lastname
 	username := signupUser.Username
 	password := signupUser.Password
-	firstName := signupUser.FirstName
-	lastName := signupUser.LastName
+	//firstName := signupUser.FirstName
+	//lastName := signupUser.LastName
 
 	result := db.Create(&User{
-		Username:  username,
-		Password:  password,
-		FirstName: firstName,
-		LastName:  lastName,
+		Username: username,
+		Password: password,
+		//FirstName: firstName,
+		//LastName:  lastName,
 	})
 
 	if result.Error != nil {
@@ -163,6 +160,14 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 }
+
+//needs to get reviews - functionality tbd with FE
+func viewReviewHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method == "POST" {
+
+	}
+}
+
 func ReviewHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "POST" {
 		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
@@ -192,7 +197,7 @@ func ReviewHandler(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
-// begin logger - DND
+// begin logger - DO NOT DELETE
 func logger(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		log.Println(r.RequestURI)
