@@ -120,7 +120,12 @@ func SignUpHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func LoginHandler(w http.ResponseWriter, r *http.Request) {
-	if r.Method != "POST" {
+	log.Println(r)
+	if r.Method == "OPTIONS" {
+		enableCors(&w)
+		//w.WriteHeader(http.StatusOK)
+		return
+	} else if r.Method != "POST" {
 		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
 		return
 	}
@@ -142,6 +147,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	} else {
 		//make logged in user the activeUser
 		activeUsername = loginUser.Username
+		fmt.Printf("Active Username Changed to: %s", activeUsername)
 	}
 }
 
