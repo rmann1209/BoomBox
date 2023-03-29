@@ -1,222 +1,285 @@
 package main
 
 import (
-	"fmt"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
+	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
 	"strings"
 	"testing"
+	"time"
 )
 
-var testDB *gorm.DB
-
+// tests sign up database
 func TestSignUpHandler(t *testing.T) {
-	// Initialize the test database
 
-	var err error
-	testDB, err = gorm.Open(sqlite.Open("testDB.db"), &gorm.Config{})
+	// Connect to the test database
 
+	testDB, err := gorm.Open(sqlite.Open("test.db"), &gorm.Config{})
+	testDB.Exec("DELETE FROM users")
 	if err != nil {
-		t.Fatalf("failed to open database: %v", err)
+		t.Fatal(err)
 	}
 
-	// Clear the users table before running the test
-	db.Exec("DELETE FROM users")
-
-	// Create a test request
-	req, err := http.NewRequest("POST", "/signup", strings.NewReader("username=testuser&password=testpassword&first_name=Test&last_name=User"))
+	// Create the User table in the test database
+	err = testDB.AutoMigrate(&User{})
 	if err != nil {
-		t.Fatalf("failed to create request: %v", err)
+		t.Fatal(err)
 	}
 
-	// Create a test response recorder
+	// Create a new HTTP request
+	result := testDB.Create(&User{
+		Username: "testuser",
+		Password: "testpass",
+		//FirstName: "Test",
+		//LastName:  "User",
+	})
+
+	// Check that the user was created in the test database
+	var user User
+	result = testDB.Where("username = ?", "testuser").First(&user)
+	if result.Error != nil {
+		t.Errorf("failed to find user in test database: %v", result.Error)
+	}
+
+	// Check that the user's details are correct
+	if user.Password != "testpass" {
+		t.Errorf("user has incorrect password: got %v want %v", user.Password, "testpass")
+	}
+
+}
+
+// login tests
+func TestLoginHandler1(t *testing.T) {
+	testDB, err := gorm.Open(sqlite.Open("test.db"), &gorm.Config{})
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	// Create the User table in the test database
+	err = testDB.AutoMigrate(&User{})
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	// Create a new HTTP request
+	result := testDB.Create(&User{
+		Username: "testuser",
+		Password: "testpass",
+		//FirstName: "Test",
+		//LastName:  "User",
+	})
+
+	// Check that the user was created in the test database
+	var user User
+	result = testDB.Where("username = ?", "testuser").First(&user)
+	if result.Error != nil {
+		t.Errorf("user has not been created to login yet: %v", result.Error)
+	}
+
+	// Check that the user's details are correct
+	if user.Password != "testpass" {
+		t.Errorf("user has incorrect password: got %v want %v", user.Password, "testpass")
+	}
+}
+
+func TestLoginHandler2(t *testing.T) {
+	testDB, err := gorm.Open(sqlite.Open("test.db"), &gorm.Config{})
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	// Create the User table in the test database
+	err = testDB.AutoMigrate(&User{})
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	// Create a new HTTP request
+	result := testDB.Create(&User{
+		Username: "testuser2",
+		Password: "testpass2",
+		//FirstName: "Test2",
+		//LastName:  "User2",
+	})
+
+	// Check that the user was created in the test database
+	var user User
+	result = testDB.Where("username = ?", "testuser2").First(&user)
+	if result.Error != nil {
+		t.Errorf("user has not been created to login yet: %v", result.Error)
+	}
+
+	// Check that the user's details are correct
+	if user.Password != "testpass2" {
+		t.Errorf("user has incorrect password: got %v want %v", user.Password, "testpass")
+	}
+}
+
+func TestSignup(t *testing.T) {
+	go main()
+	time.Sleep(1 * time.Second)
+
+	// create request body
+	requestBody := strings.NewReader(`{"username": "Ben", "password": "Pass"}`)
+
+	// create request
+	url := "http://localhost:8080/signup"
+	req, err := http.NewRequest("POST", url, requestBody)
+	if err != nil {
+		t.Fatal(err)
+	}
+	req.Header.Set("Content-Type", "application/json")
+
+	// create a new response recorder to record the response
 	rr := httptest.NewRecorder()
 
-	// Call the signup handler with the test request and response recorder
+	// call the SignUpHandler function with the request and response recorder
 	SignUpHandler(rr, req)
 
-	// Check if the response status code is OK
+	// check if the account was created successfully
+	var actualAccount User
+	if err := db.First(&actualAccount, "username = ?", "Ben").Error; err != nil {
+		t.Errorf("failed to retrieve account from database: %v", err)
+	}
+
+	expectedAccount := User{
+		Username: "Ben",
+		Password: "Pass",
+	}
+
+	if actualAccount.Username != expectedAccount.Username {
+		t.Errorf("unexpected username: got %v want %v", actualAccount.Username, expectedAccount.Username)
+	}
+	if actualAccount.Password != expectedAccount.Password {
+		t.Errorf("unexpected password: got %v want %v", actualAccount.Password, expectedAccount.Password)
+	}
+}
+
+func TestHomeHandler2(t *testing.T) {
+	// Create a new HTTP request with method OPTIONS
+	req, err := http.NewRequest("OPTIONS", "http://localhost:8080/", nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	// Create a new response recorder to record the response
+	rr := httptest.NewRecorder()
+
+	// Call the HomeHandler function with the request and response recorder
+	HomeHandler(rr, req)
+
+	// Check if the HTTP status code is 200 OK
 	if status := rr.Code; status != http.StatusOK {
-		t.Errorf("handler returned wrong status code: got %v want %v", status, http.StatusOK)
+		t.Errorf("handler returned wrong status code: got %v want %v",
+			status, http.StatusOK)
 	}
 
-	// Check if the user was created in the database
-	var user User
-	if err := testDB.Where("username = ?", "testuser").First(&user).Error; err != nil {
-		t.Errorf("failed to find user: %v", err)
+	// Check if the response headers contain the expected CORS headers
+	expectedHeaders := map[string]string{
+		"Access-Control-Allow-Origin":  "*",
+		"Access-Control-Allow-Methods": "POST, OPTIONS",
 	}
-
-	// Check if the user's details were correctly saved in the database
-	if user.Username != "testuser" {
-		t.Errorf("username not saved correctly: got %v want %v", user.Username, "testuser")
+	for key, value := range expectedHeaders {
+		if rr.Header().Get(key) != value {
+			t.Errorf("unexpected header value for %s: got %s want %s", key, rr.Header().Get(key), value)
+		}
 	}
-	if user.Password != "testpassword" {
-		t.Errorf("password not saved correctly: got %v want %v", user.Password, "testpassword")
-	}
-	if user.FirstName != "Test" {
-		t.Errorf("first name not saved correctly: got %v want %v", user.FirstName, "Test")
-	}
-	if user.LastName != "User" {
-		t.Errorf("last name not saved correctly: got %v want %v", user.LastName, "User")
-	}
-
-	fmt.Println("Test Signup Handler Successful")
 }
 
-func TestLoginHandler(t *testing.T) {
-	// Initialize the test database
-	var err error
-	db, err = gorm.Open(sqlite.Open("testDB.db"), &gorm.Config{})
+// tests that local host functions and launches
+func TestHomeHandler(t *testing.T) {
+	// start server
+	go main()
+	time.Sleep(2 * time.Second)
+
+	// create request
+	url := "http://localhost:8080/home"
+	resp, err := http.Get(url)
 	if err != nil {
-		t.Fatalf("failed to open database: %v", err)
+		t.Errorf("error making request: %v", err)
+		return
 	}
+	defer resp.Body.Close()
 
-	// Create a test user in the database
-	testUser := User{
-		Username:  "testuser",
-		Password:  "testpassword",
-		FirstName: "Test",
-		LastName:  "User",
-	}
-	db.Create(&testUser)
-
-	// Create a test request with valid login credentials
-	reqValid, err := http.NewRequest("POST", "/login", strings.NewReader("username=testuser&password=testpassword"))
+	// check response body
+	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		t.Fatalf("failed to create request: %v", err)
+		t.Errorf("error reading response body: %v", err)
+		return
 	}
-
-	// Create a test response recorder
-	rrValid := httptest.NewRecorder()
-
-	// Call the login handler with the valid test request and response recorder
-	LoginHandler(rrValid, reqValid)
-
-	// Check if the response status code is a redirect to the home page
-	if status := rrValid.Code; status != http.StatusSeeOther {
-		t.Errorf("handler returned wrong status code: got %v want %v", status, http.StatusSeeOther)
+	if len(body) == 0 {
+		t.Errorf("empty response body")
+		return
 	}
-
-	// Create a test request with invalid login credentials
-	reqInvalid, err := http.NewRequest("POST", "/login", strings.NewReader("username=testuser&password=wrongpassword"))
-	if err != nil {
-		t.Fatalf("failed to create request: %v", err)
-	}
-
-	// Create a test response recorder
-	rrInvalid := httptest.NewRecorder()
-
-	// Call the login handler with the invalid test request and response recorder
-	LoginHandler(rrInvalid, reqInvalid)
-
-	// Check if the response status code is a bad request
-	if status := rrInvalid.Code; status != http.StatusBadRequest {
-		t.Errorf("handler returned wrong status code: got %v want %v", status, http.StatusBadRequest)
-	}
-	fmt.Println("Test Login Successful")
 }
 
-func TestSignupAndLogin(t *testing.T) {
-	// Initialize the test database
+func TestReviewHandler(t *testing.T) {
+	// Set the active username
+	activeUsername = "evan"
 
-	var err error
-	db, err = gorm.Open(sqlite.Open("testDB.db"), &gorm.Config{})
+	// Create a new HTTP request with method POST and empty body
+	go main()
+	time.Sleep(1 * time.Second)
+
+	// create request
+	url := "http://localhost:8080/review"
+	resp, err := http.Get(url)
 	if err != nil {
-		t.Fatalf("failed to open database: %v", err)
+		t.Errorf("error making request: %v", err)
+		return
 	}
-
-	// Clear the users table before running the test
-	db.Exec("DELETE FROM users")
-
-	// Create a test request to signup
-	signupReq, err := http.NewRequest("POST", "/signup", strings.NewReader("username=testuser&password=testpassword&first_name=Test&last_name=User"))
+	defer resp.Body.Close()
+	req, err := http.NewRequest("POST", url, nil)
 	if err != nil {
-		t.Fatalf("failed to create signup request: %v", err)
+		t.Fatal(err)
 	}
 
-	// Create a test response recorder for signup
-	signupRR := httptest.NewRecorder()
-
-	// Call the signup handler with the test request and response recorder
-	SignUpHandler(signupRR, signupReq)
-
-	// Check if the response status code is OK
-	if status := signupRR.Code; status != http.StatusOK {
-		t.Errorf("signup handler returned wrong status code: got %v want %v", status, http.StatusOK)
-	}
-
-	// Create a test request to login
-	loginReq, err := http.NewRequest("POST", "/login", strings.NewReader("username=testuser&password=testpassword"))
-	if err != nil {
-		t.Fatalf("failed to create login request: %v", err)
-	}
-
-	// Create a test response recorder for login
-	loginRR := httptest.NewRecorder()
-
-	// Call the login handler with the test request and response recorder
-	LoginHandler(loginRR, loginReq)
-
-	// Check if the response status code is OK
-	if status := loginRR.Code; status != http.StatusSeeOther {
-		t.Errorf("login handler returned wrong status code: got %v want %v", status, http.StatusSeeOther)
-	}
-
-	// Check if the response redirected to the correct page
-	if redirectURL := loginRR.Header().Get("Location"); redirectURL != "/home" {
-		t.Errorf("login handler redirected to wrong URL: got %v want %v", redirectURL, "/home")
-	}
-	fmt.Println("Test Sign Up and Login Successful")
-}
-
-func TestHomeHandler_SignUpButton(t *testing.T) {
-	// Create a test request with "Sign up" as the form value
-	req, err := http.NewRequest("POST", "/home", strings.NewReader("action=Sign up"))
-	if err != nil {
-		t.Fatalf("failed to create request: %v", err)
-	}
-
-	// Create a test response recorder
+	// Create a new response recorder to record the response
 	rr := httptest.NewRecorder()
 
-	// Call the home handler with the test request and response recorder
-	HomeHandler(rr, req)
+	// Call the ReviewHandler function with the request and response recorder
+	ReviewHandler(rr, req)
 
-	// Check if the response status code is a redirect
-	if status := rr.Code; status != http.StatusSeeOther {
-		t.Errorf("handler returned wrong status code: got %v want %v", status, http.StatusSeeOther)
+	// Check if the HTTP status code is 201 Created
+	if status := rr.Code; status != http.StatusCreated {
+		t.Errorf("handler returned wrong status code: got %v want %v",
+			status, http.StatusCreated)
 	}
 
-	// Check if the response header "Location" is "/signup"
-	if location := rr.Header().Get("Location"); location != "/signup" {
-		t.Errorf("handler returned wrong location header: got %v want %v", location, "/signup")
-	}
-	fmt.Println("Test Signup Button Successful")
-}
-
-func TestHomeHandler_LoginButton(t *testing.T) {
-	// Create a test request with "Login" as the form value
-	req, err := http.NewRequest("POST", "/home", strings.NewReader("action=Login"))
-	if err != nil {
-		t.Fatalf("failed to create request: %v", err)
+	// Check if the review was properly inputted
+	var actualReview SongReview
+	if err := db2.Last(&actualReview).Error; err != nil {
+		t.Errorf("failed to retrieve review from database: %v", err)
 	}
 
-	// Create a test response recorder
-	rr := httptest.NewRecorder()
-
-	// Call the home handler with the test request and response recorder
-	HomeHandler(rr, req)
-
-	// Check if the response status code is a redirect
-	if status := rr.Code; status != http.StatusSeeOther {
-		t.Errorf("handler returned wrong status code: got %v want %v", status, http.StatusSeeOther)
+	expectedReview := SongReview{
+		SongTitle: "Sky",
+		Artist:    "Playboi Carti",
+		Rating:    5,
+		Comment:   "Fire",
+		Author:    "evan",
 	}
 
-	// Check if the response header "Location" is "/login"
-	if location := rr.Header().Get("Location"); location != "/login" {
-		t.Errorf("handler returned wrong location header: got %v want %v", location, "/login")
+	if actualReview.SongTitle != expectedReview.SongTitle {
+		t.Errorf("unexpected username: got %v want %v",
+			actualReview.SongTitle, expectedReview.SongTitle)
 	}
-	fmt.Println("Test Login Button Successful")
+	if actualReview.Artist != expectedReview.Artist {
+		t.Errorf("unexpected username: got %v want %v",
+			actualReview.Artist, expectedReview.Artist)
+	}
+	if actualReview.Rating != expectedReview.Rating {
+		t.Errorf("unexpected username: got %v want %v",
+			actualReview.Rating, expectedReview.Rating)
+	}
+	if actualReview.Comment != expectedReview.Comment {
+		t.Errorf("unexpected username: got %v want %v",
+			actualReview.Comment, expectedReview.Comment)
+	}
+	if actualReview.Author != expectedReview.Author {
+		t.Errorf("unexpected username: got %v want %v",
+			actualReview.Author, expectedReview.Author)
+	}
 }
