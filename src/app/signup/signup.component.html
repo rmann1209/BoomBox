@@ -16,12 +16,12 @@
 
           <div class="container">
             <label for="uname"><b>Username</b></label>
-            <input id="Username" type="text" placeholder="Enter Username" name="uname" required>
+            <input id="Username" formControlName="Username" type="text" placeholder="Enter Username" name="uname" required>
 
             <label for="psw"><b>Password</b></label>
-            <input id="Password" type="password" placeholder="Enter Password" name="psw" required>
+            <input id="Password" formControlName="Password" type="password" placeholder="Enter Password" name="psw" required>
 
-            <button id="submit" [routerLink]="'/login'" (click)="addUser(this.accountForm.controls['Username'].value || '', this.accountForm.controls['Password'].value || '')">Sign Up</button>
+            <button id="submit" (click)="addUser(this.accountForm.controls['Username'].value || '', this.accountForm.controls['Password'].value || '')">Sign Up</button>
           </div>
 
         </form>

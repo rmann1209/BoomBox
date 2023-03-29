@@ -11,16 +11,16 @@
       <body>
 
         <!-- Login Section -->
-        <form action="https://www.w3schools.com/howto/howto_css_login_form.asp" method="post">
+        <form [formGroup]="accountForm" method="post">
 
           <div class="container">
             <label for="uname"><b>Username</b></label>
-            <input id="Username" type="text" placeholder="Enter Username" name="uname" required>
+            <input id="Username" formControlName="Username" type="text" placeholder="Enter Username" name="uname" required>
 
             <label for="psw"><b>Password</b></label>
-            <input id="Password" type="password" placeholder="Enter Password" name="psw" required>
+            <input id="Password" formControlName="Password" type="password" placeholder="Enter Password" name="psw" required>
 
-            <button id="submit" type="submit">Login</button>
+            <button id="submit" (click)="addUser(this.accountForm.controls['Username'].value || '', this.accountForm.controls['Password'].value || '')">Login</button>
           </div>
 
         </form>
