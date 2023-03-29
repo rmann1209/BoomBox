@@ -19,19 +19,19 @@ export interface User {
 @Injectable({
   providedIn: 'root'
 })
-export class signupUser {
+export class loginUser {
 
   baseUrl: string = 'http://localhost:8080';
   constructor(private http : HttpClient){}
 
 
-  addUser(user: User): Observable<User> {
+  loginUser(user: User): Observable<User> {
 
-    const signUpURL:string = this.baseUrl + '/signup';
+    const loginURL:string = this.baseUrl + '/login';
 
-    console.log("addUser: " + user.username + ' ' + user.password + ' '+ signUpURL);
+    console.log("loginUser: " + user.username + ' ' + user.password + ' '+ loginURL);
 
-    return this.http.post<User>(signUpURL, user, httpPost);
+    return this.http.post<User>(loginURL, user, httpPost);
   }
 
 

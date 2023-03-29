@@ -20,7 +20,7 @@
             <label for="psw"><b>Password</b></label>
             <input id="Password" formControlName="Password" type="password" placeholder="Enter Password" name="psw" required>
 
-            <button id="submit" (click)="addUser(this.accountForm.controls['Username'].value || '', this.accountForm.controls['Password'].value || '')">Login</button>
+            <button id="submit" (click)="loginUser(this.accountForm.controls['Username'].value || '', this.accountForm.controls['Password'].value || '')">Login</button>
           </div>
 
         </form>

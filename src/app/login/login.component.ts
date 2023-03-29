@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder } from '@angular/forms'
-import { User, signupUser } from '../signup/signup.service';
+import { User, loginUser } from './login.service';
 
 
 @Component({
@@ -11,15 +11,15 @@ import { User, signupUser } from '../signup/signup.service';
 export class LoginComponent {
   title = 'Boombox';
 
-  constructor(private formBuilder:FormBuilder, private SignupUser:signupUser){}
+  constructor(private formBuilder:FormBuilder, private LoginUser:loginUser){}
 
   accountForm = this.formBuilder.group({
     Username:[''],
     Password:['']
   })
 
-  addUser(username: string, password: string) : void {
-    this.SignupUser.addUser({username, password} as User)
+  loginUser(username: string, password: string) : void {
+    this.LoginUser.loginUser({username, password} as User)
     .subscribe((response: any) => {
       console.log(response);
     });
