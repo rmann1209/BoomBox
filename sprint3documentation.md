@@ -14,6 +14,13 @@ Issues Completed Back End:
 
 Back end tests:
 
+1. TestSignUpHandler: Tests the user database in order to ensure that when a a new account is inserted into the database, it is saved there.
+2. TestLoginHandler1 and 2: Similar to TestSignUpHandler, but checks multiple other usernames and passwords within the database.
+3. TestSignup: Launches the localHost and tests that when an http request is made to signup a test user, the user is saved within the database.
+4. TestHomeHandler2: Creates a local host and http request to launch the homepage, and checks that the homepage contains the proper information stored in the function.
+5. TestHomeHandler: Creates a local host and http requet to check that the homepage does indeed exist.
+6. TestReviewHandler: Launches a local host and creates an http request to add a new review to the review database, checks that the review matches what is expected in terms of title, artist, rating, comment, and author.
+
 Back End Documentation:
 
 	Objects Created:
