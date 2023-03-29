@@ -152,21 +152,16 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func HomeHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method == "OPTIONS" {
+		enableCors(&w)
+		//w.WriteHeader(http.StatusOK)
+		return
+	}
+	enableCors(&w)
 	if r.Method != "POST" {
 		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
 		return
 	}
-	result := r.FormValue("action")
-	if result == "Sign up" {
-		http.Redirect(w, r, "/signup", http.StatusSeeOther)
-	} else if result == "Login" {
-		http.Redirect(w, r, "/login", http.StatusSeeOther)
-
-	} else {
-		http.Redirect(w, r, "/home", http.StatusSeeOther)
-
-	}
-
 }
 
 // needs to get reviews - functionality tbd with FE
@@ -177,6 +172,10 @@ func viewReviewHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func ReviewHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method == "OPTIONS" {
+		enableCors(&w)
+		return
+	}
 	if r.Method != "POST" {
 		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
 		return
@@ -217,5 +216,4 @@ func enableCors(w *http.ResponseWriter) { //this function enables Cors which may
 	(*w).Header().Set("Access-Control-Allow-Origin", "*")
 	(*w).Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
 	(*w).Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, X-Requested-With")
-
 }
