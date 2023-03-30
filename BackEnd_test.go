@@ -263,23 +263,23 @@ func TestReviewHandler(t *testing.T) {
 	}
 
 	if actualReview.SongTitle != expectedReview.SongTitle {
-		t.Errorf("unexpected username: got %v want %v",
+		t.Errorf("unexpected Song title: got %v want %v",
 			actualReview.SongTitle, expectedReview.SongTitle)
 	}
 	if actualReview.Artist != expectedReview.Artist {
-		t.Errorf("unexpected username: got %v want %v",
+		t.Errorf("unexpected Artist: got %v want %v",
 			actualReview.Artist, expectedReview.Artist)
 	}
 	if actualReview.Rating != expectedReview.Rating {
-		t.Errorf("unexpected username: got %v want %v",
+		t.Errorf("unexpected Rating: got %v want %v",
 			actualReview.Rating, expectedReview.Rating)
 	}
 	if actualReview.Comment != expectedReview.Comment {
-		t.Errorf("unexpected username: got %v want %v",
+		t.Errorf("unexpected Review: got %v want %v",
 			actualReview.Comment, expectedReview.Comment)
 	}
 	if actualReview.Author != expectedReview.Author {
-		t.Errorf("unexpected username: got %v want %v",
+		t.Errorf("unexpected Author: got %v want %v",
 			actualReview.Author, expectedReview.Author)
 	}
 }
