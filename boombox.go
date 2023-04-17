@@ -4,11 +4,12 @@ import (
 	"embed"
 	"encoding/json"
 	"fmt"
+	"log"
+	"net/http"
+
 	"github.com/gorilla/mux"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
-	"log"
-	"net/http"
 )
 
 type User struct {
@@ -147,6 +148,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	} else {
 		//make logged in user the activeUser
 		activeUsername = loginUser.Username
+
 		fmt.Printf("Active Username Changed to: %s", activeUsername)
 	}
 }

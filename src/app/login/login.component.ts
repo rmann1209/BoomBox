@@ -3,6 +3,8 @@ import { FormBuilder } from '@angular/forms'
 import { User, loginUser } from './login.service';
 
 
+var UserName = null
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -21,7 +23,11 @@ export class LoginComponent {
   loginUser(username: string, password: string) : void {
     this.LoginUser.loginUser({username, password} as User)
     .subscribe((response: any) => {
-      console.log("gay ass nigga" + response);
+      if (response == null){
+        UserName = username
+        console.log(UserName)
+       //TODO clear UserName variable when logging out?
+      }
     });
   }
 
