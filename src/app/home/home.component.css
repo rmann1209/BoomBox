@@ -51,7 +51,7 @@
   }
 
   .feature {
-    max-width: 300px;
+    max-width: 1000px;
     text-align: center;
     margin-bottom: 2em;
     margin-top: -33%;
@@ -63,7 +63,8 @@
   }
 
   .feature h3 {
-    font-size: 1.5rem;
+    font-size: 4rem;
+    line-height: normal;
     margin-bottom: 0.5em;
   }
 
@@ -86,4 +87,8 @@
 
   .cta p {
     font-size: 1.2
+  }
+
+  .container {
+    margin-top: -50%;
   }
