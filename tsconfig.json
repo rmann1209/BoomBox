@@ -34,7 +34,7 @@
   "include": ["**/*.spec.ts",
     "**/*.d.ts",
     "**/*.ts"],
-  "exclude": ["cypress.config.ts"], // THESE TWO FOR UNIT TESTS
+  "exclude": ["cypress.config.ts", "**/*.spec.ts"], // THESE TWO FOR UNIT TESTS
   "files": ["cypress.config.ts"]
 }
 

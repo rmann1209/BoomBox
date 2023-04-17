@@ -21,7 +21,7 @@ export class LoginComponent {
   loginUser(username: string, password: string) : void {
     this.LoginUser.loginUser({username, password} as User)
     .subscribe((response: any) => {
-      console.log(response);
+      console.log("gay ass nigga" + response);
     });
   }
 

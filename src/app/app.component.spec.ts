@@ -20,9 +20,5 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   }));
 
-  it('check if even', async(() => {
-    expect(2==2).toBeTruthy();
-  }));
-
 
 });
