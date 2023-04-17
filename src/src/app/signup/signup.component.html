@@ -1,0 +1,26 @@
+<router-outlet>
+    <!DOCTYPE html>
+    <html lang="en">
+      <head>
+        <!--CSS Styles -->
+        <link rel="stylesheet" href="./signup.component.css" />
+      </head>
+
+        <!-- Login Section -->
+        <form [formGroup]="accountForm" method="post">
+
+          <div class="container">
+            <label for="uname"><b>Username</b></label>
+            <input id="Username" formControlName="Username" type="text" placeholder="Enter Username" name="uname" required>
+
+            <label for="psw"><b>Password</b></label>
+            <input id="Password" formControlName="Password" type="password" placeholder="Enter Password" name="psw" required>
+
+            <button id="submit" (click)="addUser(this.accountForm.controls['Username'].value || '', this.accountForm.controls['Password'].value || '')">Sign Up</button>
+          </div>
+
+        </form>
+
+    </html>
+
+    </router-outlet>

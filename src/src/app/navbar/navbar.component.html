@@ -1,0 +1,20 @@
+<router-outlet>
+    <!DOCTYPE html>
+    <html lang="en">
+      <head>
+        <!--CSS Styles -->
+        <link rel="stylesheet" href="./navbar.component.css" />
+      </head>
+
+        <nav class="navbar navbar-expand-sm bg-info navbar-dark">
+            <header class ="TITLE">BoomBox</header>
+
+            <input id="home-button" type="submit" class="navButton" name="action" value="Home" [routerLink]="'/home'">
+            <input id="login-button" type="submit" class="navButton" name="action" value="Login" [routerLink]="'/login'">
+            <input id="signup-button" type="submit" class="navButton" name="action" value="Sign up" [routerLink]="'/signup'">
+            <!--<button class="button">FEET PICS</button>-->
+          </nav>
+
+    </html>
+
+</router-outlet>
