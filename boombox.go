@@ -80,15 +80,16 @@ func SignUpHandler(w http.ResponseWriter, r *http.Request) {
 	log.Println(r)
 	if r.Method == "OPTIONS" {
 		enableCors(&w)
-		//w.WriteHeader(http.StatusOK)
 		return
 	} else if r.Method == "GET" {
 		fmt.Println("GET REQUEST RECEIVED ON SIGNUP")
 		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
+		enableCors(&w)
 		return
 	} else if r.Method != "POST" {
 		fmt.Printf("POST REQUEST NOT RECEIVED ON SIGNUP %s received instead", r.Method)
 		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
+		enableCors(&w)
 		return
 	}
 	enableCors(&w)
@@ -101,14 +102,9 @@ func SignUpHandler(w http.ResponseWriter, r *http.Request) {
 	//temp removed firstname lastname
 	username := signupUser.Username
 	password := signupUser.Password
-	//firstName := signupUser.FirstName
-	//lastName := signupUser.LastName
-	//fmt.Printf("Name: %s Password: %s", username, password)
 	result := db.Create(&User{
 		Username: username,
 		Password: password,
-		//FirstName: firstName,
-		//LastName:  lastName,
 	})
 
 	if result.Error != nil {
@@ -138,9 +134,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	username := loginUser.Username
 	password := loginUser.Password
-
 	user := User{}
-
 	result := db.Where("username = ? AND password = ?", username, password).First(&user)
 	if result.Error != nil {
 		http.Error(w, "Username or password is incorrect", http.StatusBadRequest)
@@ -161,6 +155,7 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 	enableCors(&w)
 	if r.Method != "POST" {
 		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
+		enableCors(&w)
 		return
 	}
 }
@@ -202,6 +197,7 @@ func AddReviewHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	if r.Method != "POST" {
 		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
+		enableCors(&w)
 		return
 	}
 	enableCors(&w)
