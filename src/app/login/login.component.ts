@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder } from '@angular/forms'
 import { User, loginUser } from './login.service';
+import { Router } from '@angular/router';
 
 
 var UserName = null
@@ -13,7 +14,7 @@ var UserName = null
 export class LoginComponent {
   title = 'Boombox';
 
-  constructor(private formBuilder:FormBuilder, private LoginUser:loginUser){}
+  constructor(private formBuilder:FormBuilder, private LoginUser:loginUser, private router:Router){}
 
   accountForm = this.formBuilder.group({
     Username:[''],
@@ -26,6 +27,7 @@ export class LoginComponent {
       if (response == null){
         UserName = username
         console.log(UserName)
+        this.router.navigate(['/profile']);
        //TODO clear UserName variable when logging out?
       }
     });

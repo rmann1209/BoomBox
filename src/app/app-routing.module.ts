@@ -6,6 +6,7 @@ import { SignupComponent } from './signup/signup.component';
 import { AppComponent } from './app.component';
 import { Router, Routes } from '@angular/router';
 import { RouterModule } from '@angular/router';
+import { ProfileComponent } from './profile/profile.component';
 
 const appRoutes: Routes = [
   {
@@ -21,6 +22,10 @@ const appRoutes: Routes = [
   {
   path : 'signup',
   component: SignupComponent
+  },
+  {
+    path: 'profile',
+    component: ProfileComponent
   }
 
 ];
