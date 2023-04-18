@@ -7,8 +7,14 @@ import { AppComponent } from './app.component';
 import { Router, Routes } from '@angular/router';
 import { RouterModule } from '@angular/router';
 import { ProfileComponent } from './profile/profile.component';
+import { ReviewComponent } from './review/review.component';
 
 const appRoutes: Routes = [
+  { 
+  path: '', 
+  redirectTo: 'home', pathMatch: 'full' 
+  },
+
   {
   path : 'home',
   component: HomeComponent
@@ -23,9 +29,15 @@ const appRoutes: Routes = [
   path : 'signup',
   component: SignupComponent
   },
+
   {
     path: 'profile',
     component: ProfileComponent
+  },
+
+  {
+    path: 'review',
+    component: ReviewComponent
   }
 
 ];
