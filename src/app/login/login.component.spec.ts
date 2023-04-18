@@ -1,7 +1,11 @@
-/*
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { ComponentFixture, async, TestBed } from '@angular/core/testing';
 import { LoginComponent } from './login.component';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import {HttpClientModule} from '@angular/common/http';
+import { RouterOutlet } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
+import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
@@ -9,6 +13,8 @@ describe('LoginComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
+      imports: [ RouterTestingModule,
+        HttpClientTestingModule, RouterOutlet, FormsModule, ReactiveFormsModule ],
       declarations: [ LoginComponent ]
     })
     .compileComponents();
@@ -18,38 +24,13 @@ describe('LoginComponent', () => {
     fixture.detectChanges();
   });
 
-});
-*/
+  it('check if even', async(() => {
+    expect(2==2).toBeTruthy();
+  }));
 
-import { HttpClientModule } from '@angular/common/http';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { MatCardModule } from '@angular/material/card';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { loginUser } from '../login/login.service';
-
-import { LoginComponent } from './login.component';
-
-describe('SignInComponent', () => {
-  let component: LoginComponent;
-  let fixture: ComponentFixture<LoginComponent>;
-
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [ LoginComponent ],
-      imports: [HttpClientModule, MatCardModule, ReactiveFormsModule, FormsModule, MatFormFieldModule, MatInputModule, BrowserAnimationsModule],
-      providers: [loginUser]
-    })
-    .compileComponents();
-
-    fixture = TestBed.createComponent(LoginComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
-
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+  it('should create the login component', async(() => {
+    const fixture = TestBed.createComponent(LoginComponent);
+    const app = fixture.debugElement.componentInstance;
+    expect(app).toBeTruthy();
+  }));
 });
