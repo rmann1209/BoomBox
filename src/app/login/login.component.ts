@@ -27,7 +27,7 @@ export class LoginComponent {
       if (response == null){
         UserName = username
         console.log(UserName)
-        this.router.navigate(['/profile']);
+        this.router.navigate(['/review']);
        //TODO clear UserName variable when logging out?
       }
     });
