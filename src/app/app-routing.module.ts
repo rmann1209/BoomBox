@@ -4,10 +4,12 @@ import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './login/login.component';
 import { SignupComponent } from './signup/signup.component';
 import { AppComponent } from './app.component';
-import { Router, Routes } from '@angular/router';
+import { Router, RouterOutlet, Routes } from '@angular/router';
 import { RouterModule } from '@angular/router';
 import { ProfileComponent } from './profile/profile.component';
 import { ReviewComponent } from './review/review.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
 
 const appRoutes: Routes = [
   { 
@@ -48,7 +50,11 @@ export default appRoutes;
   declarations: [],
   imports: [
     CommonModule,
-    RouterModule
+    RouterModule.forRoot(appRoutes),
+    RouterOutlet,
+    FormsModule,
+    ReactiveFormsModule
+    
   ],
   exports:[]
 })
