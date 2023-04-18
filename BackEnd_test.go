@@ -1,6 +1,8 @@
 package main
 
 import (
+	"encoding/json"
+	"fmt"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 	"io/ioutil"
@@ -240,7 +242,7 @@ func TestReviewHandler(t *testing.T) {
 	rr := httptest.NewRecorder()
 
 	// Call the ReviewHandler function with the request and response recorder
-	ReviewHandler(rr, req)
+	AddReviewHandler(rr, req)
 
 	// Check if the HTTP status code is 201 Created
 	if status := rr.Code; status != http.StatusCreated {
@@ -282,4 +284,64 @@ func TestReviewHandler(t *testing.T) {
 		t.Errorf("unexpected Author: got %v want %v",
 			actualReview.Author, expectedReview.Author)
 	}
+}
+
+func TestViewReviewHandler(t *testing.T) {
+
+	go main()
+	time.Sleep(1 * time.Second)
+
+	// Initialize the database connection and migrate the schema
+	db2, err := gorm.Open(sqlite.Open("reviews.db"), &gorm.Config{})
+	if err != nil {
+		t.Fatalf("failed to connect to database: %v", err)
+	}
+	if err := db2.AutoMigrate(&SongReview{}); err != nil {
+		t.Fatalf("failed to migrate database schema: %v", err)
+	}
+
+	activeUsername := "evan"
+	activeReview := SongReview{SongTitle: "Song Title", Artist: "Artist Name", Rating: 5, Comment: "eh", Author: activeUsername}
+	db.Create(&activeReview)
+
+	// create a new HTTP request
+	req, err := http.NewRequest("GET", fmt.Sprintf("/viewreview/%s", activeUsername), nil)
+	if err != nil {
+		t.Fatalf("failed to create HTTP request: %v", err)
+	}
+
+	// create a new HTTP response recorder to capture the response
+	w := httptest.NewRecorder()
+
+	// Call the ReviewHandler function with the request and response recorder
+	viewReviewHandler(w, req)
+
+	// Check that the HTTP status code is 200 OK
+	if w.Code != http.StatusOK {
+		t.Errorf("expected status code %d, got %d", http.StatusOK, w.Code)
+	}
+
+	// Decode the response body into a slice of SongReview objects
+	var responseReviews []SongReview
+	responseBody, err := ioutil.ReadAll(w.Body)
+	if err != nil {
+		t.Fatalf("failed to read response body: %v", err)
+	}
+	if err := json.Unmarshal(responseBody, &responseReviews); err != nil {
+		t.Fatalf("failed to decode response body: %v", err)
+	}
+	fmt.Printf("Response Reviews: %+v\n", responseReviews)
+
+	// Check that the response contains the test review
+	found := false
+	for _, review := range responseReviews {
+		if review.Author == activeUsername {
+			found = true
+			break
+		}
+	}
+	if !found {
+		t.Errorf("expected review with author %s to be in response, but not found", activeUsername)
+	}
+
 }

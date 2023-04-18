@@ -4,12 +4,11 @@ import (
 	"embed"
 	"encoding/json"
 	"fmt"
-	"log"
-	"net/http"
-
 	"github.com/gorilla/mux"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
+	"log"
+	"net/http"
 )
 
 type User struct {
@@ -34,7 +33,7 @@ var db *gorm.DB  //db for users
 var db2 *gorm.DB //db for reviews
 var static embed.FS
 
-var activeUsername string = ""
+var activeUsername string = "evan"
 
 func main() {
 	//db -> database for users
@@ -64,7 +63,8 @@ func main() {
 	r.HandleFunc("/home", HomeHandler)
 	r.HandleFunc("/signup", SignUpHandler)
 	r.HandleFunc("/login", LoginHandler)
-	r.HandleFunc("/review", ReviewHandler)
+	r.HandleFunc("/addreview", AddReviewHandler)
+	r.HandleFunc("/viewreview", viewReviewHandler)
 	http.Handle("/", r)
 
 	//starts logger
@@ -148,7 +148,6 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	} else {
 		//make logged in user the activeUser
 		activeUsername = loginUser.Username
-
 		fmt.Printf("Active Username Changed to: %s", activeUsername)
 	}
 }
@@ -168,12 +167,35 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 
 // needs to get reviews - functionality tbd with FE
 func viewReviewHandler(w http.ResponseWriter, r *http.Request) {
-	if r.Method == "POST" {
+	if r.Method == "OPTIONS" {
+		enableCors(&w)
+		return
+	} else if r.Method == "POST" {
 
+		enableCors(&w)
+		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
+		return
+	} else if r.Method == "GET" {
+		//receive get request -> send back a review
+		enableCors(&w)
+		//query database
+		var matchingReviews []SongReview
+		db.Where("Author = ?", activeUsername).Find(&matchingReviews)
+		//send back an http response
+		reviewsJSON, err := json.Marshal(matchingReviews)
+		if err != nil {
+			// Handle error if the JSON marshaling fails
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		// Dont know why we need this but we def do
+		w.Header().Set("Content-Type", "application/json")
+		// Write the JSON response
+		w.Write(reviewsJSON)
 	}
 }
 
-func ReviewHandler(w http.ResponseWriter, r *http.Request) {
+func AddReviewHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "OPTIONS" {
 		enableCors(&w)
 		return
