@@ -52,7 +52,7 @@ FRONT END CYPRESS TESTS:
 - Test sign up page by filling out username and password and submitting form
 - Test log in page by filling out username and password and submitting form
 - Creates new user with sign up functionality, then reroutes to login page and logs in using user credentials.
-
+- Test review functionality by logging in, entering an artist, writing a review, and leaving 5 stars.
 
 
 BACKEND DOCUMENTATION:

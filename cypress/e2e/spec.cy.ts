@@ -50,4 +50,18 @@ describe('template spec', () => {
     cy.get('#submit').click();
   })
 
+  it('Review Functionality', () => {
+    cy.visit('http://localhost:4200/');
+    cy.get('#login-button').click();
+    cy.get('#Username').type('test');
+    cy.get('#Password').type('test');
+    cy.get('#submit').click();
+
+    cy.get('#search-input').type('Taylor Swift');
+    cy.get('#Confirm-button').click();
+    cy.get('#review-input').type('Cool Beans!');
+    cy.get('.star-rating > :nth-child(5)').click;
+    cy.get('#submit-button').click();
+  })
+
 })
