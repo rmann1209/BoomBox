@@ -1,4 +1,60 @@
-Backend Documentation:
+Work Completed Front End:
+1. Updated log in and sign up css to a sleeker design
+2. Fixed bug where containers would scroll over top of the navbar
+3. Set initial and unknown page reroutes to redirect back to home page
+4. Updated home page design to introduce the site
+5. Created a review component where users can input song, album, or artist names and leave a written review
+6. Implemented a rating system for users to give a rating from 1 to 5 stars
+7. Rerouted login submission to redirect to newly created review page
+8. Created a profile component for users to store information related to their account on login
+9. Implemented numerous cypress tests to verify functionality of our buttons, rerouting, form submissions, etc (listed below)
+10. Implemented new Unit tests to verify proper functionality of all components (listed below)
+
+FRONT END UNIT TESTS:
+AppComponent
+- should create the app
+
+NavbarComponent
+- should navigate to sign up when sign up button is clicked
+- should create the navbar component
+- should navigate to home when home button is clicked
+- should navigate to login when login button is clicked
+
+ProfileComponent
+- should create the profile component
+
+LoginComponent
+- form should be valid when fields are filled out
+- loginUser function should be called on button click
+- should create the login component
+- form should be invalid initially
+
+SignupComponent
+- should have a valid form when both fields are filled
+- should create the signup component
+- should add a user when form is submitted with valid data
+- should have an invalid form when empty
+
+HomeComponent
+- should create the home component
+
+ReviewComponent
+- should submit a review when the user clicks the submit button
+- should initialize with default values
+- should show the review box when user submits a search query
+- should create the review component
+
+FRONT END CYPRESS TESTS:
+- Verify home button rerouting
+- Verify sign up button rerouting
+- Verify log in button rerouting
+- Test sign up page by filling out username and password and submitting form
+- Test log in page by filling out username and password and submitting form
+- Creates new user with sign up functionality, then reroutes to login page and logs in using user credentials.
+
+
+
+BACKEND DOCUMENTATION:
 
 Objects Created:
 1. User struct
