@@ -11,6 +11,7 @@ Work Completed Front End:
 10. Implemented new Unit tests to verify proper functionality of all components (listed below)
 
 FRONT END UNIT TESTS:
+
 AppComponent
 - should create the app
 
