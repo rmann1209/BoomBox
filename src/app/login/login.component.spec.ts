@@ -24,14 +24,27 @@ describe('LoginComponent', () => {
     fixture.detectChanges();
   });
 
-  it('check if even', async(() => {
-    expect(2==2).toBeTruthy();
-  }));
-
   it('should create the login component', async(() => {
     const fixture = TestBed.createComponent(LoginComponent);
     const app = fixture.debugElement.componentInstance;
     expect(app).toBeTruthy();
   }));
+
+  it('form should be invalid initially', () => {
+    expect(component.accountForm.valid).toBeFalsy();
+  });
+  
+  it('form should be valid when fields are filled out', () => {
+    component.accountForm.controls['Username'].setValue('testuser');
+    component.accountForm.controls['Password'].setValue('testpassword');
+    expect(component.accountForm.valid).toBeTruthy();
+  });
+  
+  it('loginUser function should be called on button click', () => {
+    spyOn(component, 'loginUser');
+    const button = fixture.debugElement.nativeElement.querySelector('#submit');
+    button.click();
+    expect(component.loginUser).toHaveBeenCalled();
+  });
 });
 

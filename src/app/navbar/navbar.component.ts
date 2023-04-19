@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-navbar',
@@ -9,6 +10,6 @@ import {HttpClient} from '@angular/common/http';
 export class NavbarComponent {
   title = 'Boombox';
 
-  constructor(private httpclient:HttpClient){}
-  
+  constructor(private httpclient:HttpClient, public router: Router){}
+
 }

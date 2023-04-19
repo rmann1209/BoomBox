@@ -25,10 +25,6 @@ describe('ProfileComponent', () => {
     fixture.detectChanges();
   });
 
-  it('check if even', async(() => {
-    expect(2==2).toBeTruthy();
-  }));
-
   it('should create the profile component', async(() => {
     const fixture = TestBed.createComponent(ProfileComponent);
     const app = fixture.debugElement.componentInstance;

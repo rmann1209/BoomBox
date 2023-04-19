@@ -22,10 +22,6 @@ describe('HomeComponent', () => {
     fixture.detectChanges();
   });
 
-  it('check if even', async(() => {
-    expect(2==2).toBeTruthy();
-  }));
-
   it('should create the home component', async(() => {
     const fixture = TestBed.createComponent(HomeComponent);
     const app = fixture.debugElement.componentInstance;
