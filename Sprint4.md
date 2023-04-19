@@ -1,3 +1,5 @@
+Video Link: https://drive.google.com/file/d/1ZjcW8C-5Jrv3T8-JEOzs8InqFhdi3JO5/view?usp=sharing
+
 Work Completed Front End:
 1. Updated log in and sign up css to a sleeker design
 2. Fixed bug where containers would scroll over top of the navbar
