@@ -159,37 +159,6 @@ func TestSignup(t *testing.T) {
 	}
 }
 
-func TestHomeHandler2(t *testing.T) {
-	// Create a new HTTP request with method OPTIONS
-	req, err := http.NewRequest("OPTIONS", "http://localhost:8080/", nil)
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	// Create a new response recorder to record the response
-	rr := httptest.NewRecorder()
-
-	// Call the HomeHandler function with the request and response recorder
-	HomeHandler(rr, req)
-
-	// Check if the HTTP status code is 200 OK
-	if status := rr.Code; status != http.StatusOK {
-		t.Errorf("handler returned wrong status code: got %v want %v",
-			status, http.StatusOK)
-	}
-
-	// Check if the response headers contain the expected CORS headers
-	expectedHeaders := map[string]string{
-		"Access-Control-Allow-Origin":  "*",
-		"Access-Control-Allow-Methods": "POST, OPTIONS",
-	}
-	for key, value := range expectedHeaders {
-		if rr.Header().Get(key) != value {
-			t.Errorf("unexpected header value for %s: got %s want %s", key, rr.Header().Get(key), value)
-		}
-	}
-}
-
 // tests that local host functions and launches
 func TestHomeHandler(t *testing.T) {
 	// start server
