@@ -111,3 +111,11 @@ Logger
 enableCors
 -func enableCors(w *http.ResponseWriter)
 -Configures settings to allow the server to receive requests.
+
+BackEnd Unit Tests:
+1. TestSignupHandler: Ensures that the database is functional and will log singup information, checking that the username and password added to the database exists.
+2. TestLoginHandler1 and 2: Tests the database with other usernames and passwords and ensures they are added.
+3. TestSignup: Launches a local host and creates an http request to sign up a username and password, looks at the most recent entry in the database to see if the info has been added.
+4. TestHomeHandler: Launches a local host and ensures the home page exists and contains the proper information.
+5. TestReviewHandler: Launches a local host and creates an http request to add a review, checks that the review has been logged in the database.
+6. TestViewReviewHandler: Launches a local host and creates an http request to view an array of reviews from the viewReviewHandler method. Searches the array for a review added into the database.
